@@ -297,6 +297,8 @@ async def bot(request: Request, payload: dict = Body(...)):
         gh_issue_body=issue_body,
     )
 
+    jira_label_list = settings.get("jira_issue_label_list", [])
+
     issue_type = "Bug"
     if settings["label_mapping"]:
         for label in payload_labels:
@@ -309,6 +311,7 @@ async def bot(request: Request, payload: dict = Body(...)):
         "summary": gh_issue.title,
         "description": issue_description,
         "issuetype": {"name": issue_type},
+        "labels": jira_label_list,
     }
     if settings["epic_key"]:
         issue_dict["parent"] = {"key": settings["epic_key"]}
